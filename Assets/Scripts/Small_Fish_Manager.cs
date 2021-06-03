@@ -6,7 +6,7 @@ public class Small_Fish_Manager : MonoBehaviour
 {
     public GameObject Prfab;
     public GameObject Goal_Object;
-    static int num = 50;
+    static int num = 30;
     public static GameObject[] AllPrefab = new GameObject[num];
 
     public static int Range = 7;

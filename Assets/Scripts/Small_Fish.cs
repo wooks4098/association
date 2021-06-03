@@ -33,7 +33,7 @@ public class Small_Fish : MonoBehaviour
         else
         {
             if (Random.Range(0, 5) < 1 && !isRunning)
-                ApplyRules();
+                GroupMove();
         }
         transform.Translate(0, 0, Time.deltaTime * speed);
     }
@@ -67,7 +67,7 @@ public class Small_Fish : MonoBehaviour
         yield return null;
     }
 
-    void ApplyRules()
+    void GroupMove()
     {
         GameObject[] gos;
         gos = Small_Fish_Manager.AllPrefab; //모든 오브젝트 받기
