@@ -6,15 +6,27 @@ using Unity.Transforms;
 using Unity.Mathematics;
 public class Dots_Smallfish_Move : SystemBase
 {
+    float3 goalPos;
     protected override void OnUpdate()
     {
-        float deltaTime = Time.DeltaTime;
+       
+       float deltaTime = Time.DeltaTime;
 
-        Entities.ForEach((ref Translation translation, ref Dots_Smallfish_base Move_Base) => {
+        Entities.ForEach((ref Translation translation, ref Rotation rot, ref Dots_Smallfish_base moveData) => {
 
-            //translation.Value =  localToWorld.Position + localToWorld.Forward * Move_Base.Speed * deltaTime;
 
-        }).ScheduleParallel(); 
+            float3 Dir = translation.Value - goalPos;
+            quaternion targetRotation = quaternion.LookRotationSafe(Dir, math.up());
+            rot.Value = math.slerp(rot.Value, targetRotation, moveData.Speed);
+
+            //float3 normalizedDir = math.normalizesafe(moveData.direction);
+            //translation.Value += normalizedDir * moveData.Speed * deltaTime;
+
+            //quaternion targetRotation = quaternion.LookRotationSafe(moveData.direction, math.up());
+            //rot.Value = math.slerp(rot.Value, targetRotation, moveData.Speed);
+
+        }).ScheduleParallel();
+      
     }
 
     //public void Execute(Translation trans, Rotation rot, ref MoveData move, ref InputFloat2Data input)
@@ -23,3 +35,4 @@ public class Dots_Smallfish_Move : SystemBase
     //    trans.Value += math.mul(rot.Value, direction) * move.moveSpeed * deltaTime;
     //}
 }
+

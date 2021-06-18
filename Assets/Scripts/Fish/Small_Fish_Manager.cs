@@ -15,13 +15,13 @@ public class Small_Fish_Manager : MonoBehaviour
 
     private void Start()
     {
-        for (int i = 0; i < num; i++)
-        {
-            Vector3 pos = new Vector3(Random.Range(-Range, Range),
-                                      Random.Range(-Range, Range),
-                                      Random.Range(-Range, Range));
-            AllPrefab[i] = Instantiate(Prfab, pos, Quaternion.identity);
-        }
+        //for (int i = 0; i < num; i++)
+        //{
+        //    Vector3 pos = new Vector3(Random.Range(-Range, Range),
+        //                              Random.Range(-Range, Range),
+        //                              Random.Range(-Range, Range));
+        //    AllPrefab[i] = Instantiate(Prfab, pos, Quaternion.identity);
+        //}
     }
 
     private void Update()

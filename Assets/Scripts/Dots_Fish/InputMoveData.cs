@@ -4,9 +4,10 @@ using UnityEngine;
 using Unity.Entities;
 using Unity.Mathematics;
 
-public struct Dots_Smallfish_base : IComponentData
+[GenerateAuthoringComponent]
+public struct InputMoveData : IComponentData
 {
     public float3 direction;
-    public float Speed;
+    public float speed;
     public float trunSpeed;
 }

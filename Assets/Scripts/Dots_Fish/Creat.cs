@@ -36,6 +36,7 @@ public class Creat : MonoBehaviour
             entityManager.AddComponentData(entity, new Dots_Smallfish_base
             {
                 Speed = Random.Range(1, 2),
+                trunSpeed = 3f,
             });
 
             entityManager.AddComponentData(entity, new Translation
