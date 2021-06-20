@@ -1,38 +1,45 @@
-﻿using Unity.Entities;
+using Unity.Entities;
 using Unity.Transforms;
 using Unity.Mathematics;
 using Unity.Collections;
 using UnityEngine;
 
-public class BoidSystemECS : ComponentSystem {
+public class BoidSystem : ComponentSystem
+{
+    private BoidController controller;
 
-    private BoidControllerECS controller;
-
-    protected override void OnUpdate() {
+    protected override void OnUpdate()
+    {
 
         // This runs only if there exists a BoidControllerECS instance.
-        if (!controller) {
-            controller = BoidControllerECS.Instance;
+        if (!controller)
+        {
+            controller = BoidController.Instance;
         }
-        if (controller) {
+        if (controller)
+        {
             EntityQuery boidQuery = GetEntityQuery(ComponentType.ReadOnly<BoidECS>(), ComponentType.ReadOnly<LocalToWorld>());
             NativeArray<float4x4> newBoidPositions = new NativeArray<float4x4>(boidQuery.CalculateEntityCount(), Allocator.Temp);
 
             int boidIndex = 0;
-            Entities.WithAll<BoidECS>().ForEach((Entity boid, ref LocalToWorld localToWorld) => {
+            Entities.WithAll<BoidECS>().ForEach((Entity boid, ref LocalToWorld localToWorld) => 
+            {
                 float3 boidPosition = localToWorld.Position;
-                
+
                 float3 seperationSum = float3.zero;
                 float3 positionSum = float3.zero;
                 float3 headingSum = float3.zero;
 
                 int boidsNearby = 0;
-                
-                Entities.WithAll<BoidECS>().ForEach((Entity otherBoid, ref LocalToWorld otherLocalToWorld) => {
-                    if (boid != otherBoid) {
-                        
+
+                Entities.WithAll<BoidECS>().ForEach((Entity otherBoid, ref LocalToWorld otherLocalToWorld) => 
+                {
+                    if (boid != otherBoid)
+                    {
+
                         float distToOtherBoid = math.length(boidPosition - otherLocalToWorld.Position);
-                        if (distToOtherBoid < controller.boidPerceptionRadius) {
+                        if (distToOtherBoid < controller.boidPerceptionRadius)
+                        {
 
                             seperationSum += -(otherLocalToWorld.Position - boidPosition) * (1f / math.max(distToOtherBoid, .0001f));
                             positionSum += otherLocalToWorld.Position;
@@ -45,16 +52,18 @@ public class BoidSystemECS : ComponentSystem {
 
                 float3 force = float3.zero;
 
-                if (boidsNearby > 0) {
-                    force += (seperationSum / boidsNearby)                * controller.separationWeight;
+                if (boidsNearby > 0)
+                {
+                    force += (seperationSum / boidsNearby) * controller.separationWeight;
                     force += ((positionSum / boidsNearby) - boidPosition) * controller.cohesionWeight;
-                    force += (headingSum / boidsNearby)                   * controller.alignmentWeight;
+                    force += (headingSum / boidsNearby) * controller.alignmentWeight;
                 }
                 if (math.min(math.min(
                     (controller.cageSize / 2f) - math.abs(boidPosition.x),
                     (controller.cageSize / 2f) - math.abs(boidPosition.y)),
                     (controller.cageSize / 2f) - math.abs(boidPosition.z))
-                        < controller.avoidWallsTurnDist) {
+                        < controller.avoidWallsTurnDist)
+                {
                     force += -math.normalize(boidPosition) * controller.avoidWallsWeight;
                 }
 
@@ -69,7 +78,8 @@ public class BoidSystemECS : ComponentSystem {
                 );
                 boidIndex++;
             });
-            
+
+
             boidIndex = 0;
             Entities.WithAll<BoidECS>().ForEach((Entity boid, ref LocalToWorld localToWorld) => {
                 localToWorld.Value = newBoidPositions[boidIndex];

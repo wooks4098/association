@@ -8,9 +8,15 @@ using Unity.Rendering;
 
 public class Creat : MonoBehaviour
 {
+    public static Creat instance;
+
     public int entities_Num;
     [SerializeField] private Mesh mesh;
     [SerializeField] private Material material;
+
+    public float neighbourDistance;
+    public float Speed;
+
 
     float Range = Small_Fish_Manager.Range;
     void Start()
@@ -20,7 +26,7 @@ public class Creat : MonoBehaviour
 
         EntityArchetype entityArchetype = entityManager.CreateArchetype(
             typeof(Dots_Smallfish_base),
-            typeof(Translation),
+           // typeof(Translation),
             typeof(Rotation),
             typeof(RenderMesh),
             typeof(RenderBounds),
@@ -39,12 +45,12 @@ public class Creat : MonoBehaviour
                 trunSpeed = 3f,
             });
 
-            entityManager.AddComponentData(entity, new Translation
-            {
-                Value = new Vector3(Random.Range(-Range, Range),
-                                      Random.Range(-Range, Range),
-                                      Random.Range(-Range, Range)),
-        });
+        //    entityManager.AddComponentData(entity, new Translation
+        //    {
+        //        Value = new Vector3(Random.Range(-Range, Range),
+        //                              Random.Range(-Range, Range),
+        //                              Random.Range(-Range, Range)),
+        //});
             entityManager.SetSharedComponentData(entity, new RenderMesh
             {
                 mesh = mesh,
