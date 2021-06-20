@@ -5,19 +5,16 @@ using Unity.Entities;
 using Unity.Transforms;
 using Unity.Mathematics;
 using Unity.Collections;
-public class Dots_Smallfish_Move : SystemBase
+public class Dots_Smallfish_Move : ComponentSystem
 {
     private Creat CreatValue;
-
     int index = 0;
     protected override void OnUpdate()
     {
         if (!CreatValue)
-        {
             CreatValue = Creat.instance;
-
-        }
-
+        if (!CreatValue)
+            return;
         EntityManager entitymanager = World.EntityManager;
 
         float3 goalPos = (float3)Small_Fish_Manager.goalPos;
@@ -36,49 +33,29 @@ public class Dots_Smallfish_Move : SystemBase
             float3 vavoid = float3.zero;
             int groupSize = 0;
 
+            Entities.WithAll<Dots_Smallfish_base>().ForEach((Entity otherentity, ref LocalToWorld otherlocalToWorld) =>
+            {//다른 entity와 위치를 비교해서 내 위치 정하기
 
-                //NativeArray<Entity> entityArry = entitymanager.GetAllEntities(Allocator.Temp);
-                //for(int i = 0; i<entityArry.Length; i++)
-                //{
-                //    if (entity != entityArry[i])
-                //    {//다른 entity만
-                //        float distance = math.length(MyPos - entityArry[i];
-                //        if (distance < CreatValue.neighbourDistance)
-                //        {//가까운 거리에 있는 entity만 적용
+                if (entity != otherentity)
+                {//다른 entity만
+                    float distance = math.length(MyPos - otherlocalToWorld.Position);
+                    if (distance < CreatValue.neighbourDistance)
+                    {//가까운 거리에 있는 entity만 적용
 
-                //            center += otherlocalToWorld.Position;
-                //            if (distance < 1.3f)
-                //            {//회피
-                //                vavoid += (MyPos - otherlocalToWorld.Position);
-                //            }
-                //            groupSize++;
-                //        }
-
-
-                //    }
-                //}
-                //Entities.WithAll<Dots_Smallfish_base>().ForEach((Entity otherentity, ref LocalToWorld otherlocalToWorld) =>
-                //{//다른 entity와 위치를 비교해서 내 위치 정하기
-
-                //    if (entity != otherentity)
-                //    {//다른 entity만
-                //        float distance = math.length(MyPos - otherlocalToWorld.Position);
-                //        if (distance < CreatValue.neighbourDistance)
-                //        {//가까운 거리에 있는 entity만 적용
-
-                //            center += otherlocalToWorld.Position;
-                //            if (distance < 1.3f)
-                //            {//회피
-                //                vavoid += (MyPos - otherlocalToWorld.Position);
-                //            }
-                //            groupSize++;
-                //        }
+                        center += otherlocalToWorld.Position;
+                        if (distance < 1.3f)
+                        {//회피
+                                 vavoid += (MyPos - otherlocalToWorld.Position);
+                        }
+                        groupSize++;
+                    }
 
 
-                //    }
-                //}).WithoutBurst().Run();
+                }
+            });
 
-                float3 force = float3.zero;
+
+            float3 force = float3.zero;
 
             if (groupSize > 0)
             {
@@ -98,24 +75,20 @@ public class Dots_Smallfish_Move : SystemBase
             );
 
 
-        }).WithoutBurst().Run();
+        });
 
 
         index = 0;
         Entities.WithAll<Dots_Smallfish_base>().ForEach((Entity entity, ref LocalToWorld localToWorld) =>
         {
-                //이동코드
-                localToWorld.Value = newPositions[index++];
-
-        }).WithoutBurst().Run();
+            //이동코드
+            localToWorld.Value = newPositions[index++];
+        });
 
     }
 
-    //public void Execute(Translation trans, Rotation rot, ref MoveData move, ref InputFloat2Data input)
-    //{
-    //    direction = math.normalizesafe(new float3(input.Results.x, 0, input.Results.y));
-    //    trans.Value += math.mul(rot.Value, direction) * move.moveSpeed * deltaTime;
-    //}
+   
 
 }
 
+// math.normalizesafe

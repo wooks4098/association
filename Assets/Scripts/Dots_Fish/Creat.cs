@@ -5,7 +5,7 @@ using Unity.Entities;
 using Unity.Transforms;
 using Unity.Collections;
 using Unity.Rendering;
-
+using Unity.Mathematics;
 public class Creat : MonoBehaviour
 {
     public static Creat instance;
@@ -21,6 +21,7 @@ public class Creat : MonoBehaviour
     float Range = Small_Fish_Manager.Range;
     void Start()
     {
+        instance = this;
         EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;//entitymanager 积己
         //entityManager.CreateEntity(typeof(Dots_Smallfish_base));//entity 积己
 
@@ -31,6 +32,7 @@ public class Creat : MonoBehaviour
             typeof(RenderMesh),
             typeof(RenderBounds),
             typeof(LocalToWorld)
+            //typeof(Translation)
             );//entity 加己 瘤沥
 
         NativeArray<Entity> entityArry = new NativeArray<Entity>(entities_Num, Allocator.Temp);
@@ -41,16 +43,24 @@ public class Creat : MonoBehaviour
 
             entityManager.AddComponentData(entity, new Dots_Smallfish_base
             {
-                Speed = Random.Range(1, 2),
+                Speed = UnityEngine.Random.Range(1, 2),
                 trunSpeed = 3f,
             });
-
-        //    entityManager.AddComponentData(entity, new Translation
-        //    {
-        //        Value = new Vector3(Random.Range(-Range, Range),
-        //                              Random.Range(-Range, Range),
-        //                              Random.Range(-Range, Range)),
-        //});
+            entityManager.SetComponentData(entity, new LocalToWorld
+            {
+                Value = float4x4.TRS(new float3(UnityEngine.Random.Range(-Range / 2f, Range / 2f),
+                                                UnityEngine.Random.Range(-Range / 2f, Range / 2f),
+                                                UnityEngine.Random.Range(-Range / 2f, Range / 2f)),
+                                       quaternion.Euler(UnityEngine.Random.Range(-360f, 360f),
+                                                        UnityEngine.Random.Range(-360f, 360f),
+                                                        UnityEngine.Random.Range(-360f, 360f)), new float3(1f))
+            });
+            //entityManager.AddComponentData(entity, new Translation
+            //{
+            //    Value = new Vector3(Random.Range(-Range, Range),
+            //                          Random.Range(-Range, Range),
+            //                          Random.Range(-Range, Range)),
+            //});
             entityManager.SetSharedComponentData(entity, new RenderMesh
             {
                 mesh = mesh,

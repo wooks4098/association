@@ -293,7 +293,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 1, z: -5.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -328,7 +328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86814480cd423124e93e0c4fb9e6703c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boidAmount: 1
+  boidAmount: 5
   sharedMesh: {fileID: 3613567641014311022, guid: 0ac9384c15e7fd346a9cb7584c59a7d2,
     type: 3}
   sharedMaterial: {fileID: 2100000, guid: 58fc4f2c6b1ae7841ad11d9dca6cd629, type: 2}
@@ -383,17 +383,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b05da4ec21b4214094e9e710bf607ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entities_Num: 2
+  entities_Num: 3
   mesh: {fileID: 4300002, guid: 762e9bf49b9559947a30c7be05f09ba5, type: 3}
   material: {fileID: 2100000, guid: 80367c8e8d1ca97499c61924422d82a5, type: 2}
-  boidSpeed: 10
-  boidPerceptionRadius: 5
-  cageSize: 40
-  separationWeight: 25
-  cohesionWeight: 5
-  alignmentWeight: 20
-  avoidWallsWeight: 10
-  avoidWallsTurnDist: 10
+  neighbourDistance: 5
+  Speed: 5
 --- !u!4 &1545018574
 Transform:
   m_ObjectHideFlags: 0
@@ -539,7 +533,7 @@ PrefabInstance:
     - target: {fileID: 3288283530697741579, guid: fb46dbf6a7d9f0f4b9409b79b94cc272,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb46dbf6a7d9f0f4b9409b79b94cc272, type: 3}
